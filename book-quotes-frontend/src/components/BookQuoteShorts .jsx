@@ -204,18 +204,18 @@ const BookQuoteShorts = () => {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 flex justify-center items-center relative overflow-hidden">
         {/* Quote Container */}
-        <div className="h-full flex items-center justify-center p-6">
-          <div 
+        <div className="h-full flex items-center justify-center p-6 w-full">
+          <div
             key={currentQuote.id}
-            className="max-w-2xl w-full bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center shadow-2xl border border-white/20 animate-fade-in"
+            className="relative max-w-2xl w-full min-h-[400px] bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center shadow-2xl border border-white/20 animate-fade-in"
           >
             {/* Quote Text */}
             <blockquote className="text-white text-xl md:text-3xl lg:text-4xl font-light leading-relaxed mb-6 italic">
               "{currentQuote.text}"
             </blockquote>
-            
+
             {/* Author and Book */}
             <div className="text-white/80 text-lg md:text-xl space-y-2">
               <div className="font-semibold">— {currentQuote.author}</div>
@@ -226,68 +226,71 @@ const BookQuoteShorts = () => {
             <div className="mt-6 text-white/60 text-sm">
               {currentIndex + 1} of {quotes.length}
             </div>
+
+            {/* Navigation Buttons (centered at bottom) */}
+            <div className="mt-14 flex justify-center space-x-12">
+              <button
+                onClick={goToPrevious}
+                className="bg-white/20 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-200"
+                aria-label="Previous quote"
+              >
+                <ChevronUp size={24} />
+              </button>
+              <button
+                onClick={goToNext}
+                className="bg-white/20 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-200"
+                aria-label="Next quote"
+              >
+                <ChevronDown size={24} />
+              </button>
+            </div>
+
+            {/* Right-side vertical action buttons */}
+            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-4">
+              {/* Like */}
+              <div className="flex flex-col items-center">
+                <button
+                  onClick={() => handleLike(currentQuote.id)}
+                  className={`p-3 rounded-full backdrop-blur-sm transition-all duration-200 ${
+                    likedQuotes.has(currentQuote.id)
+                      ? 'bg-red-500 text-white'
+                      : 'bg-white/20 hover:bg-white/30 text-white'
+                  }`}
+                  aria-label="Like quote"
+                >
+                  <Heart
+                    size={24}
+                    fill={likedQuotes.has(currentQuote.id) ? 'currentColor' : 'none'}
+                  />
+                </button>
+                <span className="text-white text-sm mt-1">
+                  {currentQuote.likes_count}
+                </span>
+              </div>
+
+              {/* Share */}
+              <button
+                onClick={() => handleShare(currentQuote)}
+                className="bg-white/20 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-200"
+                aria-label="Share quote"
+              >
+                <Share2 size={24} />
+              </button>
+
+              {/* Auto-play */}
+              <button
+                onClick={() => setIsAutoPlay((prev) => !prev)}
+                className={`p-3 rounded-full backdrop-blur-sm transition-all duration-200 ${
+                  isAutoPlay
+                    ? 'bg-green-500 text-white'
+                    : 'bg-white/20 hover:bg-white/30 text-white'
+                }`}
+                aria-label="Toggle auto-play"
+              >
+                {isAutoPlay ? <Pause size={24} /> : <Play size={24} />}
+              </button>
+            </div>
           </div>
-        </div>
-
-        {/* Navigation Buttons */}
-        <button
-          onClick={goToPrevious}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-200"
-          aria-label="Previous quote"
-        >
-          <ChevronUp size={24} />
-        </button>
-
-        <button
-          onClick={goToNext}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-200"
-          aria-label="Next quote"
-        >
-          <ChevronDown size={24} />
-        </button>
-
-        {/* Action Buttons - Right Side */}
-        <div className="absolute right-6 bottom-20 flex flex-col space-y-4">
-          {/* Like Button */}
-          <button
-            onClick={() => handleLike(currentQuote.id)}
-            className={`p-3 rounded-full backdrop-blur-sm transition-all duration-200 ${
-              likedQuotes.has(currentQuote.id)
-                ? 'bg-red-500 text-white'
-                : 'bg-white/20 hover:bg-white/30 text-white'
-            }`}
-            aria-label="Like quote"
-          >
-            <Heart 
-              size={24} 
-              fill={likedQuotes.has(currentQuote.id) ? 'currentColor' : 'none'}
-            />
-          </button>
-          <span className="text-white text-sm text-center">
-            {currentQuote.likes_count}
-          </span>
-
-          {/* Share Button */}
-          <button
-            onClick={() => handleShare(currentQuote)}
-            className="bg-white/20 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-200"
-            aria-label="Share quote"
-          >
-            <Share2 size={24} />
-          </button>
-
-          {/* Auto-play Toggle */}
-          <button
-            onClick={() => setIsAutoPlay(prev => !prev)}
-            className={`p-3 rounded-full backdrop-blur-sm transition-all duration-200 ${
-              isAutoPlay
-                ? 'bg-green-500 text-white'
-                : 'bg-white/20 hover:bg-white/30 text-white'
-            }`}
-            aria-label="Toggle auto-play"
-          >
-            {isAutoPlay ? <Pause size={24} /> : <Play size={24} />}
-          </button>
         </div>
 
         {/* Progress Indicator */}

@@ -50,23 +50,29 @@ const BookQuoteShorts = () => {
 
   // Fetch quotes from API
   const fetchQuotes = useCallback(async () => {
-    try {
-      setLoading(true);
-      // Replace with actual API call
-      const response = await fetch('/api/quotes/random?limit=10');
-      const data = await response.json();
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setQuotes(data);
-      setError(null);
-    } catch (err) {
-      setError('Failed to fetch quotes');
-      console.error('Error fetching quotes:', err);
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    const response = await fetch('/api/quote/random?limit=10');
+
+    if (!response.ok) {
+      // If API responds with error status, use mockQuotes
+      setQuotes(mockQuotes);
+      setError(`API responded with status ${response.status}, showing mock quotes.`);
+      return;
     }
-  }, []);
+
+    const data = await response.json();
+    setQuotes(data); // Use API data if successful
+    setError(null);
+  } catch (err) {
+    // Network or other errors → fallback to mockQuotes
+    console.error('Error fetching quotes:', err);
+    setQuotes(mockQuotes);
+    // setError('Failed to fetch API, showing mock quotes.');
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   useEffect(() => {
     fetchQuotes();

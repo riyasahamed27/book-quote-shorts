@@ -52,7 +52,7 @@ const BookQuoteShorts = () => {
   const fetchQuotes = useCallback(async () => {
   setLoading(true);
   try {
-    const response = await fetch('/api/quote/random?limit=10');
+    const response = await fetch('/api/quotes/random?limit=10');
 
     if (!response.ok) {
       // If API responds with error status, use mockQuotes
